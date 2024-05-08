@@ -1,0 +1,5 @@
+to build a image = $docker build -t bitcamp .
+to run a container = $docker run -d --name bitcamp_container -p 8000:80 bitcamp
+to start = $docker start bitcamp_container
+
+to stop = $docker stop bitcamp_container
