@@ -1,0 +1,3 @@
+to make a migration = $ alembic revision --autogenerate -m "Message Here"
+
+to run a migration = $ alembic upgrade head

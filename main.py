@@ -1,13 +1,18 @@
 from fastapi import FastAPI, Depends, HTTPException
 from sqlalchemy.orm import Session
 from typing import Annotated
-from client import models, handler
 from config.db import engine, SessionLocal
+from client import models as client_models
+from competition.models import competition as comp_models
+from competition.models import task as task_models
+from client import handler
 
 
 
 
-models.Base.metadata.create_all(bind=engine)
+client_models.Base.metadata.create_all(bind=engine)
+comp_models.Base.metadata.create_all(bind=engine)
+task_models.Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 
