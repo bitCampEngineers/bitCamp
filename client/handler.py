@@ -64,4 +64,13 @@ def create_user(db: Session, user: User):
     return db_user
 
 
+def delete_user(db: Session, username: str):
+    db_user = db.query(models.User).filter(models.User.username == username).first()
+    if db_user:
+        db.delete(db_user)
+        db.commit()
+        return True
+    return False
+
+
 
