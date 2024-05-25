@@ -10,4 +10,4 @@ class User(Base):
     username = Column(String, unique=True, index=True)
     password = Column(String)
     point = Column(Integer)
-    is_active = Column(Boolean=True)
+    is_active = Column(Boolean, default=True)
