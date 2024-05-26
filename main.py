@@ -39,14 +39,28 @@ def get_users(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
     return users
 
 
+@app.get("/users/{user_id}",response_model= handler.User)
+def get_user(user_id: int, db: Session = Depends(get_db)):
+    db_user = handler.get_user(db, user_id=user_id)
+    if db_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return db_user
+
 
 @app.post("/register/", response_model = handler.User)
 def create_user(user: handler.UserCreate, db: Session = Depends(get_db)):
     db_user = handler.get_user_by_username(db, username=user.username)
     if db_user:
-        raise HTTPException(status_code=400, error_message = "Email already used")
+        raise HTTPException(status_code=400, error_message = "Username already used")
     return handler.create_user(db=db, user=user)
 
+
+@app.put("/users/{user_id}/", response_model= handler.User)
+def update_user(user_id: int, user_update: handler.UserUpdate, db: Session = Depends(get_db)):
+    updated_user = handler.update_user(db, user_id, user_update)
+    if updated_user is None:
+        raise HTTPException(status_code=404, detail="User not found")
+    return updated_user
 
 
 @app.delete("/delete-users/{username}", status_code=status.HTTP_204_NO_CONTENT)
