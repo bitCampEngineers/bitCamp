@@ -1,6 +1,9 @@
 from fastapi import FastAPI, Depends, HTTPException, status
 from sqlalchemy.orm import Session
 from typing import List
+from typing_extensions import Annotated
+from fastapi.security import OAuth2PasswordRequestForm
+import datetime
 from config.db import engine, SessionLocal
 from client import models as client_models
 from competition.models import competition as comp_models
@@ -35,9 +38,9 @@ async def root():
 
 
 @app.get("/users/", response_model = List[handler.User])
-def get_users(skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
+def get_users(token: Annotated[str, Depends(handler.oauth2_scheme)],skip: int = 0, limit: int = 50, db: Session = Depends(get_db)):
     users = handler.get_users(db, skip=skip, limit=limit)
-    return users
+    return users, token
 
 
 @app.get("/users/{user_id}",response_model= handler.User)
@@ -69,6 +72,23 @@ def delete_user(username: str, db: Session = Depends(get_db)):
     if not handler.delete_user(db=db, username=username):
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
+
+
+@app.post("/login/token")
+async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends(),
+) -> handler.Token:
+    user = handler.authenticate_user(db, form_data.username, form_data.password)
+    if not user:
+        raise HTTPException(
+            status_code=status.HTTP_401_UNAUTHORIZED,
+            detail="Incorrect username or password",
+            headers={"WWW-Authenticate": "Bearer"},
+        )
+    access_token_expires = datetime.timedelta(minutes=handler.ACCESS_TOKEN_EXPIRE_MINUTES)
+    access_token = handler.create_access_token(
+        data = {"sub": user.username}, expires_delta=access_token_expires
+    )
+    return handler.Token(access_token=access_token, token_type="bearer")
 
 
 @app.get("/get-task/",  status_code=status.HTTP_200_OK)
