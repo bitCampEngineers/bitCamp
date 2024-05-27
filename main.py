@@ -12,6 +12,7 @@ client_models.Base.metadata.create_all(bind=engine)
 comp_models.Base.metadata.create_all(bind=engine)
 task_models.Base.metadata.create_all(bind=engine)
 
+
 app = FastAPI()
 
 # Dependency
@@ -68,4 +69,22 @@ def delete_user(username: str, db: Session = Depends(get_db)):
     if not handler.delete_user(db=db, username=username):
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
+
+
+@app.get("/get-task/",  status_code=status.HTTP_200_OK)
+def get_user(count: int = 1, types: str = 'Easy'):
+    response = []
+    def get_task():
+        return randint(0, 1827)
+    
+
+    while count > 0:
+        response.append(get_task())
+        count -= 1
+    
+    return {
+        "success": "True",
+        "result": response
+    }
+
 

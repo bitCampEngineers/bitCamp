@@ -5,6 +5,7 @@ from passlib.context import CryptContext
 from typing import Optional
 
 
+
 """Pydantic models"""
 
 class UserBase(BaseModel):
@@ -53,7 +54,7 @@ def get_user_by_username(db: Session, username: str):
 
 
 def get_users(db: Session, skip: int = 0, limit: int = 3):
-    return db.query(models.User).offset(skip).limit(limit).all()
+    return db.query(models.User).offset(skip).all()
 
 
 def create_user(db: Session, user: User): 
@@ -76,7 +77,7 @@ def create_user(db: Session, user: User):
 def update_user(db: Session, user_id: int, user_update: UserUpdate):
     # Fetch the user from the database
     db_user = db.query(models.User).filter(models.User.id == user_id).first()
-    
+
     if not db_user:
         return None
     
