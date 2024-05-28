@@ -51,7 +51,7 @@ def get_user(user_id: int, db: Session = Depends(get_db)):
     return db_user
 
 
-@app.post("/register/", response_model = handler.User)
+@app.post("users/register/", response_model = handler.User)
 def create_user(user: handler.UserCreate, db: Session = Depends(get_db)):
     db_user = handler.get_user_by_username(db, username=user.username)
     if db_user:
@@ -67,14 +67,14 @@ def update_user(user_id: int, user_update: handler.UserUpdate, db: Session = Dep
     return updated_user
 
 
-@app.delete("/delete-users/{username}", status_code=status.HTTP_204_NO_CONTENT)
+@app.delete("/users/delete/{username}", status_code=status.HTTP_204_NO_CONTENT)
 def delete_user(username: str, db: Session = Depends(get_db)):
     if not handler.delete_user(db=db, username=username):
         raise HTTPException(status_code=404, detail="User not found")
     return {"detail": "User deleted successfully"}
 
 
-@app.post("/login/token")
+@app.post("/users/token")
 async def login_for_access_token(db: Session = Depends(get_db), form_data: OAuth2PasswordRequestForm = Depends(),
 ) -> handler.Token:
     user = handler.authenticate_user(db, form_data.username, form_data.password)
