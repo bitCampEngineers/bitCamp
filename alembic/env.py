@@ -15,6 +15,10 @@ from client.models import Base as client_models_base
 from competition.models.competition import Base as comp_models_base
 from shared.models import Base as shared_models_base
 from competition.models.task import Base as tasks_models_base
+from competition.models.case import Base as cases_models_base
+from competition.models.input import Base as inputs_models_base
+
+
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
 
@@ -38,6 +42,8 @@ metadata_list = [
     comp_models_base.metadata,
     shared_models_base.metadata,
     tasks_models_base.metadata,
+    inputs_models_base.metadata,
+    cases_models_base.metadata,
 ]
 for metadata in metadata_list:
     for table in metadata.tables.values():

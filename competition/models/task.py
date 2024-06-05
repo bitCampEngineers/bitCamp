@@ -13,3 +13,4 @@ class Task(Base):
     difficulty = Column(String)
 
     competitions = relationship("Competition", back_populates="tasks")
+    cases = relationship('Case', back_populates='tasks')
