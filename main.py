@@ -8,12 +8,16 @@ from config.db import engine, SessionLocal
 from client import models as client_models
 from competition.models import competition as comp_models
 from competition.models import task as task_models
+from competition.models import case as case_models
+from competition.models import input as input_models
 from client import handler
 
 
 client_models.Base.metadata.create_all(bind=engine)
 comp_models.Base.metadata.create_all(bind=engine)
 task_models.Base.metadata.create_all(bind=engine)
+case_models.Base.metadata.create_all(bind=engine)
+input_models.Base.metadata.create_all(bind=engine)
 
 
 app = FastAPI()
