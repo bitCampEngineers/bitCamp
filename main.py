@@ -34,6 +34,7 @@ def get_db():
 
 @app.get("/")
 async def root():
+<<<<<<< HEAD
     return {"message": "Hello World"}
 
 
@@ -112,3 +113,6 @@ def get_user(count: int = 1, types: str = 'Easy'):
     }
 
 
+=======
+    return {"message": "IYA FEZURBEK otlamen"}
+>>>>>>> origin/daddy
